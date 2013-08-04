@@ -1,0 +1,40 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="calibre_id">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:title>EPUB for Dummies</dc:title>
+        <dc:creator opf:role="aut" opf:file-as="Me">Me</dc:creator>
+        <dc:language>en-us</dc:language>
+    </metadata>
+    <manifest>
+        <item id="id1" href="content/calibre_title_page.html" media-type="application/xhtml+xml"/>
+        <item href="content/076543219X__p__split_0.html" id="id2.1" media-type="application/xhtml+xml"/>
+		<item href="content/076543219X__p__split_1.html" id="id2.2" media-type="application/xhtml+xml"/>
+		<item href="content/076543219X__p__split_2.html" id="id2.3" media-type="application/xhtml+xml"/>
+		<item href="content/076543219X__p__split_3.html" id="id2.4" media-type="application/xhtml+xml"/>
+		<item href="content/076543219X__p__split_4.html" id="id2.5" media-type="application/xhtml+xml"/>
+		<item href="content/076543219X__p__split_5.html" id="id2.6" media-type="application/xhtml+xml"/>
+		<item href="content/076543219X__p__split_6.html" id="id2.7" media-type="application/xhtml+xml"/>
+		<item href="content/076543219X__p__split_7.html" id="id2.8" media-type="application/xhtml+xml"/>
+		<item id="id3" href="content/076543219X_top.htm" media-type="application/xhtml+xml"/>
+        <item id="id4" href="content/resources/076543219X_top_2.css" media-type="text/css"/>
+        <item id="id5" href="content/resources/076543219X__p__2.css" media-type="text/css"/>
+        <item id="id6" href="content/resources/076543219X__p__1.css" media-type="text/css"/>
+        <item id="id7" href="content/resources/076543219X__p__0.css" media-type="text/css"/>
+        <item id="id8" href="content/resources/076543219X_top_0.css" media-type="text/css"/>
+        <item id="id9" href="content/resources/076543219X_top_1.css" media-type="text/css"/>
+        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+    <item href="content/resources/_cover_.jpg" id="id2" media-type="image/jpeg"/>
+		</manifest>
+    <spine toc="ncx">
+        <itemref idref="id1"/>
+        <itemref idref="id2.1"/>
+		<itemref idref="id2.2"/>
+		<itemref idref="id2.3"/>
+		<itemref idref="id2.4"/>
+		<itemref idref="id2.5"/>
+		<itemref idref="id2.6"/>
+		<itemref idref="id2.7"/>
+		<itemref idref="id2.8"/>
+		<itemref idref="id3"/>
+    </spine>
+</package>

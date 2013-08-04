@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/menu_pick_epub"
+        android:title="@string/menu_pick_epub"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom" />
+    <item android:id="@+id/menu_chapters"
+        android:title="@string/menu_chapters"
+        android:orderInCategory="110"
+        android:showAsAction="ifRoom" />
+    <item android:id="@+id/menu_bookmark"
+        android:title="@string/menu_bookmark"
+        android:orderInCategory="200"
+        android:showAsAction="ifRoom" />
+</menu>

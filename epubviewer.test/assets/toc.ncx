@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en">
+    <head>
+        <meta name="dtb:uid" content="fae04ec0-301f-11d3-bf4b-00c04f79efbc"/>
+        <meta name="dtb:depth" content="2"/>
+        <meta name="dtb:generator" content="calibre"/>
+        <meta name="dtb:totalPageCount" content="0"/>
+        <meta name="dtb:maxPageNumber" content="0"/>
+    </head>
+    <docTitle><text>Table of Contents</text></docTitle>
+    <navMap>
+        <navPoint id="4dd6a8be-bebe-44f6-94d4-5f05b23fb38d" playOrder="1">
+            <navLabel>
+                <text>Prologue</text>
+            </navLabel>
+            <content src="content/078912345X__p__split_1.html#Chap_0"/>
+        </navPoint>
+        <navPoint id="7791902a-d771-44cc-8692-5014434b91e5" playOrder="2">
+            <navLabel>
+                <text>Lights, Camera, Action.</text>
+            </navLabel>
+            <content src="content/078912345X__p__split_2.html#Chap_1"/>
+        </navPoint>
+    </navMap>
+</ncx>

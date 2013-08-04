@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en">
+    <head>
+        <meta name="dtb:uid" content="ae59498a-b937-4f84-abd9-4222f236e4c1"/>
+        <meta name="dtb:depth" content="2"/>
+        <meta name="dtb:generator" content="calibre"/>
+        <meta name="dtb:totalPageCount" content="0"/>
+        <meta name="dtb:maxPageNumber" content="0"/>
+    </head>
+    <docTitle><text>Table of Contents</text></docTitle>
+    <navMap>
+        <navPoint id="116f4d31-2b73-4fbd-85c4-8d437f6fccc1" playOrder="1">
+            <navLabel>
+                <text>Prologue 1</text>
+            </navLabel>
+            <content src="content/074349881X__p__split_1.html#Chap_0"/>
+            <navPoint id="1563d3d9-33c5-472e-bcf4-587923f3137b" playOrder="2">
+                <navLabel>
+                    <text>Prologue 1.1</text>
+                </navLabel>
+                <content src="content/074349881X__p__split_1.html#Chap_1.1"/>
+            </navPoint>
+            <navPoint id="1563d3d9-33c5-472e-bcf4-587923f3137d" playOrder="3">
+                <navLabel>
+                    <text>Prologue 1.2</text>
+                </navLabel>
+                <content src="content/074349881X__p__split_1.html#Chap_1.2"/>
+            </navPoint>
+                <navPoint id="1563d3d9-33c5-472e-bcf4-587923f3137c" playOrder="4">
+                    <navLabel>
+                        <text>Prologue 1.2.1</text>
+                    </navLabel>
+                    <content src="content/074349881X__p__split_1.html#Chap_1.1.1"/>
+                </navPoint>
+        </navPoint>
+        <navPoint id="1563d3d9-33c5-472e-bcf4-587923f3137a" playOrder="5">
+            <navLabel>
+                <text>Prologue 2</text>
+            </navLabel>
+            <content src="content/074349881X__p__split_2.html#Chap_1"/>
+        </navPoint>
+    </navMap>
+</ncx>

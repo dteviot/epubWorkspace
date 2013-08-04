@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">epubViewer</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_pick_epub">Pick Book</string>
+    <string name="menu_chapters">Chapters</string>
+    <string name="menu_bookmark">Bookmark</string>
+    <string name="no_epub_found">No epub files Found</string>
+    <string name="sd_card_not_mounted">SD card not mounted</string>
+    <string name="epub_title">Title</string>
+    <string name="no_book_selected">No book selected</string>
+    <string name="not_implemented">Not implemented</string>
+    <string name="something_is_badly_broken">Something is badly broken</string>
+    <string name="end_of_book">End of book</string>
+    <string name="bookmark_dialog_title">Set/Restore Bookmark</string>
+    <string name="bookmark_dialog_set_button">Set Bookmark</string>
+    <string name="bookmark_dialog_goto_button">Goto Bookmark</string>
+    <string name="bookmark_dialog_start_speech">Start Speech</string>
+    <string name="bookmark_dialog_stop_speech">Stop Speech</string>
+    <string name="options_menu_title">Options</string>
+    <string name="text_to_speech_not_installed">Text To Speech not installed</string>
+    <string name="table_of_contents_missing">Table of Contents not found</string>
+</resources>
