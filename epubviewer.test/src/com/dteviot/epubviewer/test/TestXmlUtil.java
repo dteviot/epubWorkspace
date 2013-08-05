@@ -1,9 +1,9 @@
 package com.dteviot.epubviewer.test;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
@@ -136,10 +136,7 @@ public class TestXmlUtil extends ActivityUnitTestCase<MainActivity> {
         }
     }
 
-    /*
-     * For some reason, on 4.1.2, StringBufferInputStream never returns -1, so never ends 
-     */
-    public void failingtestBasicXmlSerializer() {
+    public void testBasicXmlSerializer() {
         String sampleXml = 
             "<?xml version='1.0' encoding='UTF-8' ?><html xmlns=\"http://www.w3.org/1999/xhtml\"><head /><body>2005</body></html>";
         
@@ -150,8 +147,7 @@ public class TestXmlUtil extends ActivityUnitTestCase<MainActivity> {
         
         try {
             serializer.setOutput(writer);
-            @SuppressWarnings("deprecation")
-            StringBufferInputStream sb = new StringBufferInputStream(sampleXml);
+            InputStream sb = new ByteArrayInputStream(sampleXml.getBytes("UTF-8"));
             XmlUtil.parseXmlResource(sb, serializerFilter, null);
             Assert.assertEquals("not original string", sampleXml, writer.toString());
         } catch (Exception e) {
