@@ -160,10 +160,13 @@ public abstract class EpubWebView extends WebView {
             }
         }
         
+        // Useful on simulator where swipe dodgy.  Less so on real devices.
+        /*
         @Override
         public boolean onDoubleTap (MotionEvent e) {
             return changeChapter(mBook.nextResource(mCurrentResourceUri));
         }
+        */
     };
 
     private boolean changeChapter(Uri resourceUri) {

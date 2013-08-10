@@ -41,11 +41,10 @@ public class ServerSocketThread extends Thread {
                 // use it to communicate with client
                 mWebServer.processClientRequest(clientSocket);
             }
-            mServerSocket.close();
         } 
         catch (IOException e) {
             // Exception can be thrown when stopping,
-            // because we're closing thread in accept().
+            // because we're closing socket in stopThread().
             // In which case, just ignore it
             if (mIsRunning) {
                 e.printStackTrace();
