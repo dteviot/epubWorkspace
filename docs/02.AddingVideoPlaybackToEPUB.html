@@ -9,7 +9,7 @@ lines of code.</H1>
 <P>In <A HREF="http://www.codeproject.com/Articles/592909/EPUB-Viewer-for-Android-with-Text-to-Speech">my
 previous article on CodeProject</A>, I showed a simple EPUB viewer
 for Android. Since then, I received a request to get the EPUB viewer
-to show MPEG-4 video embedded in an EPUB. A feature of the EPUB 3.0
+to show MPEG-4 video embedded in an EPUB which is a feature of the EPUB 3.0
 specification. This article describes how this can be done, with some
 limitations.</P>
 
@@ -21,24 +21,22 @@ limitations.</P>
     <LI>Building a bare bones Web Server
     hosted in the EPUB.</LI> 
     <LI>Issues/limitations of the Android
-    MediaPlayer and how to check your MPEG-4 for compatibility.</LI>
+    MediaPlayer and how to check a MPEG-4 video for compatibility.</LI>
 </UL>
 </P>
 <P>As this is a contination of my previous article I'm going to assume you've already read that.</P>
-<P>Also, this code was tested using the Android 4.1.2 emulator supplied
-by Google. I have not tested this code with with other versions of Android. Feedback is welcomed.</P>
 <H2>Displaying Video in a WebView</H2>
 <P>From the EPUB 3 specification, video content can be included in a
 document via the HTML 5 &lt;video&gt; tag. As the EPUB viewer I
-provided used the Andriod WebView control to show the content, it
+provided used the Android WebView control to show the content, it
 should have "just worked". Unfortunately, it didn't.</P>
 <P>There were two problems with the EPUB viewer. First, the
-WebView was not configured to show video. Second, it turns out that the WebView
+WebView was not configured to show video. Second, WebView
 does not not call WebViewClient.shouldInterceptRequest() to obtain video
 content.</P>
-<P>Configuring the WebView for video proved to be easy (at least for
-Android 4.1.2) it required giving the WebView a WebChromeClient and
-seting PluginState to ON_DEMAND. So, problem one was solved by adding
+<P>Configuring the WebView for video is easy (at least for
+Android 4.1.2). Just give the WebView a WebChromeClient and
+set PluginState to ON_DEMAND. Which requires adding
 two lines to the EpubWebView constructor</P>
 <pre lang="java">
     public EpubWebView(Context context, AttributeSet attrs) {
@@ -55,9 +53,9 @@ two lines to the EpubWebView constructor</P>
 <P></P>
 <P>I believe shouldInterceptRequest() is not called because video playback is not done by the actual WebView.
 Instead, the WebView delegates this to a MediaPlayer, passing the MediaPlayer the URI of the video content.</P>
-<P>In the old EPUB viewer we were suppling the URIs as file scheme references.  So the MediaPlayer was trying
+<P>In the old EPUB viewer we were supplying the URIs as file scheme references.  So the MediaPlayer was trying
 to read the files and failing. Because the files don't exist "on disk".
-Anyway, the failure to call shouldInterceptRequest() can be solved this by having the EPUB viewer run a web server and changing the URIs supplied to the WebView
+Not calling shouldInterceptRequest() can be worked around by having the EPUB viewer run a web server and changing the URIs supplied to the WebView
 to refer to the web server.  Thus, the Media Player makes an HTTP request to the EPUB viwer to get the video content.
 </P>
 <P>The revised code to give HTTP URIs is:</P>
@@ -75,15 +73,15 @@ to refer to the web server.  Thus, the Media Player makes an HTTP request to the
 <H2>A Bare Bones Web Server</H2>
 <P>The web server has to do the following:
 <UL>
-    <LI>Listen for incomming requests.</LI>
-    <LI>Parse the request to determine the wanted file.</LI>
+    <LI>Listen for incoming requests.</LI>
+    <LI>Parse the request to determine the requested file.</LI>
     <LI>Return the requested file.</LI>
 </UL>
 </P>
-<P>Listening for network requests is done with a <code>java.net.ServerSocket</code>.
+<P>Listening for network requests can be done with a <code>java.net.ServerSocket</code>.
 This 
 <a href="http://docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html">Oracle Tutorial</a>
-describes how to use a ServerSocket in detail. But the bare bones (stripped of error handling) looks like this:
+describes how to use a ServerSocket in detail. Stripped of error handling the code looks like this:
 </P>
 <pre lang="java">
 public class ServerSocketThread extends Thread {
@@ -114,31 +112,35 @@ public class ServerSocketThread extends Thread {
             // use it to communicate with client
             mWebServer.processClientRequest(clientSocket);
         }
-        serverSocket.close();
+    }
+    
+    public synchronized void stopThread(){
+        mIsRunning = false;
+        mServerSocket.close();
     }
 }    
 </pre>
 <P></P>
-<P>A vital point to note is that the <code>accept()</code> blocks.  That is, the call won't return
-until a client connects.  Therefore, if you call it on you main thread your application will halt. To avoid this, the ServerSocket is created on a separate thread.  Basically, a class is derived from 
-<code>java.lang.Thread</code> and the <code>run()</code> method is overridden.
+<P>The vital point to note is <code>accept()</code> is a blocking function. The call won't return
+until a client connects.  If you call it on your application's main thread, your application will halt. To avoid this, the ServerSocket must be created on its own thread.
+To create a thread, derive a class from <code>java.lang.Thread</code> and override the <code>run()</code> method.
 </P>
-<P>The other point to note is that the Socket isn't procesing the client's request, instead this is 
-delegated to the "mWebServer" object.  Which is passed into the thread's constructor.</P>
-<P>The "mWebServer" has three responsibilities:
+<P>The other point of note is that the Socket doesn't process the client's request. The request is 
+delegated to the "mWebServer" object which was supplied to the thread's constructor.</P>
+<P>The "mWebServer" object has three responsibilities:
 <UL>
-    <LI>Parse the client's request, to determine what action the the client has requested.</LI>
+    <LI>Parse the client's request to determine what action the client has requested.</LI>
     <LI>Perform the action.</LI>
     <LI>Return details of the action to the client.</LI>
 </UL>
-<P>As we know the client is making HTTP requests, we can use the <code>org.apache.http.protocol.HttpService</code>
-class to do most of the work. The <a href="http://hc.apache.org/httpcomponents-core-ga/tutorial/html/fundamentals.html">Apache documentation</a>
+<P>The <code>org.apache.http.protocol.HttpService</code>
+class will handle most of this work. The <a href="http://hc.apache.org/httpcomponents-core-ga/tutorial/html/fundamentals.html">Apache documentation</a>
 for this class is quite lengthy. But the basic steps are:
 <UL>
     <LI>Create a <code>HttpService</code>.</LI>
-    <LI>Add Intereptors for the HTTP header information that needs to be processed.</LI>
-    <LI>Register handlers, which perform the requested actions.</LI>
-    <LI>When recieve a request from a client, call HttpService's <code>handleRequest()</code> with the client's socket.</LI>
+    <LI>Add Interceptors for the HTTP header information that needs to be processed.</LI>
+    <LI>Register handlers to perform the requested actions.</LI>
+    <LI>When receive a request from a client, call HttpService's <code>handleRequest()</code> with the client's socket.</LI>
 </UL>
 </P>A bare bones WebServer looks like this:<P>
 </P>
@@ -157,8 +159,8 @@ public class WebServer {
 
         // set up Interceptors.
         //... ResponseContent is required, or it doesn't work.
-        //... Others are recommended (in Apache docs) but not
-        //... strictly needed in this case.
+        //... Apache docs recommended the others be provided but
+        //... they are not strictly needed in this case.
         BasicHttpProcessor httpproc = new BasicHttpProcessor();
         httpproc.addInterceptor(new ResponseContent());
         httpproc.addInterceptor(new ResponseConnControl());
@@ -200,7 +202,7 @@ public class WebServer {
 </UL>
 </P>
 <P>The handler needs to return the "file" corresponding to a URI.  This sounds very much like what our Book
-class does. In fact, we can get our Book class to implement the HttpRequestHandler interface by adding a single function:
+class does. In fact, we turn our Book class into a HttpRequestHandler by adding a single function:
 <pre lang="java">
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
@@ -231,21 +233,23 @@ class does. In fact, we can get our Book class to implement the HttpRequestHandl
 Specifically, the <a href="http://developer.android.com/guide/appendix/media-formats.html">android docs</a> say 
 "For 3GPP and MPEG-4 containers, the <code>moov</code> atom must precede any <code>mdat</code> atoms, but must succeed the <code>ftyp</code> atom".</P>
 <P>What this means (grossly simplifying): A MPEG-4 is made up of "atoms" (in the earlier spec) or "boxes" 
-(current spec). The MPEG-4 spec allows the <code>moov</code> atom can be at the start or end of the file.
-The <code>moov</code> atom is very important it's an index of where all the other atoms are in the file. In particular, the <code>mdat</code> atoms
-that hold the video data.
-Thus, MediaPlayer has problems when reciving an MPEG-4 over HTTP when the <code>moov</code> atom is at the end of the stream,
-beacuse MedaiPlayer can't play anything until it gets the <code>moov</code> atom.</P>
-<P><a href="http://atomicparsley.sourceforge.net">AtomicParsley</a> can be used to inspect an MPEG-4 file to see if the atoms are in an invalid order.</P>
+(current spec). The <code>moov</code> atom is the index of where all the other atoms are in the file.  In particular, the <code>mdat</code> atoms
+that hold the video data. The MPEG-4 spec allows the <code>moov</code> atom to be at the start or end of the file.
+However, when the <code>moov</code> atom is at the end of a HTTP stream, MediaPlayer has problems because it can't play anything until it reads the <code>moov</code> atom.</P>
+<P><a href="http://atomicparsley.sourceforge.net">AtomicParsley</a> can be used to inspect an MPEG-4 file to see if the atoms are in the correct order for MediaPlayer.</P>
 <P>If the <code>moov</code> atom is at the end of the file, then a tool such as "qt-faststart" can be used to move the "<code>moov</code>" atom to the start of the MPEG-4.</P>
 <P></P>
 <P></P>
+<H2>Source Code</H2>
+<P>The latest version of the source code can be <a href="https://github.com/dteviot/epubWorkspace">downloaded from GitHub</a>.</P>
+<P></P>
+<P></P>
 <H2>Running the supplied code</H2>
-<P>Included with this project is the very simple EPUB file (edited_CC.2.epub) with an embedded video file. I created this file from the 
+<P>Included with the source code is a simple EPUB file with an embedded video file (workingVideo.epub). I created this file from the 
 <a href="http://code.google.com/p/epub-samples/downloads/detail?name=cc-shared-culture-20120130.epub">Creative Commons sample EPUB</a>.
-I created it by removing all but one page, all images audio and video, and then adding a <a href="http://commonsware.com/misc/test2.3gp">single video file</a>
+by removing all but one page, all images audio and video and then adding a <a href="http://ia700200.us.archive.org/21/items/Pepa-creativeCommonsMp4956/Pepa-creativeCommonsMp4956.mp4">single video file</a>
 The EPUB viewer was able to show the video when run on the Android emulator with Android version 4.1.2.
-The EPUB viwer needs this file to be installed onto the SD card, in a directory called "Download". (On DDMS, the path is "mnt/sdcard/Download".)
+The EPUB viewer needs this file to be installed onto the SD card, in a directory called "Download". (On DDMS, the path is "mnt/sdcard/Download".)
 </P>
 <P></P>
 <P></P>
