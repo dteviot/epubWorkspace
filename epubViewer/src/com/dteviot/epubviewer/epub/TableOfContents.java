@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 
+import com.dteviot.epubviewer.HrefResolver;
+
 import android.content.Intent;
 import android.sax.Element;
 import android.sax.EndElementListener;
@@ -30,6 +32,7 @@ public class TableOfContents {
     
     private int mCurrentDepth = 0;
     private int mSupportedDepth = 1;
+    private HrefResolver mHrefResolver = null;
     
     public TableOfContents() {
         mNavPoints = new ArrayList<NavPoint>();
@@ -76,10 +79,11 @@ public class TableOfContents {
      * build parser to parse the "Table of Contents" file,
      * @return parser
      */
-    public ContentHandler constructTocFileParser() {
+    public ContentHandler constructTocFileParser(HrefResolver resolver) {
         RootElement root = new RootElement(XML_NAMESPACE_TABLE_OF_CONTENTS, XML_ELEMENT_NCX);
         Element navMap = root.getChild(XML_NAMESPACE_TABLE_OF_CONTENTS, XML_ELEMENT_NAVMAP);
         Element navPoint = navMap.getChild(XML_NAMESPACE_TABLE_OF_CONTENTS, XML_ELEMENT_NAVPOINT);
+        mHrefResolver = resolver;
         AddNavPointToParser(navPoint);
         return root.getContentHandler();
     }
@@ -110,7 +114,7 @@ public class TableOfContents {
 
         content.setStartElementListener(new StartElementListener(){
             public void start(Attributes attributes) {
-                getLatestPoint().setContent(attributes.getValue(XML_ATTRIBUTE_SCR));
+                getLatestPoint().setContent(mHrefResolver.ToAbsolute(attributes.getValue(XML_ATTRIBUTE_SCR)));
             }
         });
 

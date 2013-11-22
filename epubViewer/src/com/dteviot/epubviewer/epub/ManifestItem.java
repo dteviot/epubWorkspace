@@ -2,6 +2,7 @@ package com.dteviot.epubviewer.epub;
 
 import org.xml.sax.Attributes;
 
+import com.dteviot.epubviewer.HrefResolver;
 import com.dteviot.epubviewer.Utility;
 
 /*
@@ -23,8 +24,8 @@ public class ManifestItem {
     /*
      * Construct from XML
      */
-    public ManifestItem(Attributes attributes, String opfFilePath) {
-        mHref = Utility.concatPath(opfFilePath, attributes.getValue(XML_ATTRIBUTE_HREF));       
+    public ManifestItem(Attributes attributes, HrefResolver resolver) {
+        mHref = resolver.ToAbsolute(attributes.getValue(XML_ATTRIBUTE_HREF));       
         mID = attributes.getValue(XML_ATTRIBUTE_ID);       
         mMediaType = attributes.getValue(XML_ATTRIBUTE_MEDIA_TYPE);       
     }

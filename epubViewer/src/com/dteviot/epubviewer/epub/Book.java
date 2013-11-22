@@ -10,6 +10,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 
 import com.dteviot.epubviewer.Globals;
+import com.dteviot.epubviewer.HrefResolver;
 import com.dteviot.epubviewer.IResourceSource;
 import com.dteviot.epubviewer.ResourceResponse;
 import com.dteviot.epubviewer.Utility;
@@ -54,11 +55,6 @@ public class Book implements IResourceSource {
      * Name of the ".opf" file in the zip archive
      */
     private String mOpfFileName;
-    
-    /*
-     * Path to the ".opf" file in the zip archive
-     */
-    private String mOpfFilePath;
     
     /*
      * Id of the "table of contents" entry in manifest
@@ -205,14 +201,15 @@ public class Book implements IResourceSource {
         parseXmlResource("META-INF/container.xml", constructContainerFileParser());
 
         if (mOpfFileName != null) {
-            mOpfFilePath = Utility.extractPath(mOpfFileName);
             parseXmlResource(mOpfFileName, constructOpfFileParser());
         }
 
         if (mTocID != null) {
             ManifestItem tocManifestItem = mManifest.findById(mTocID);
             if (tocManifestItem != null) {
-                parseXmlResource(tocManifestItem.getHref(), mTableOfContents.constructTocFileParser());
+                String tocFileName = tocManifestItem.getHref();
+                HrefResolver resolver = new HrefResolver(tocFileName);
+                parseXmlResource(tocFileName, mTableOfContents.constructTocFileParser(resolver));
             }
         }
     }
@@ -258,9 +255,10 @@ public class Book implements IResourceSource {
         Element spine = root.getChild(XML_NAMESPACE_PACKAGE, XML_ELEMENT_SPINE);
         Element itemref = spine.getChild(XML_NAMESPACE_PACKAGE, XML_ELEMENT_ITEMREF);
 
+        final HrefResolver resolver = new HrefResolver(mOpfFileName);
         manifestItem.setStartElementListener(new StartElementListener(){
             public void start(Attributes attributes) {
-                mManifest.add(new ManifestItem(attributes, mOpfFilePath));
+                mManifest.add(new ManifestItem(attributes, resolver));
             }
         });
         
