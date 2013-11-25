@@ -3,6 +3,7 @@ package com.dteviot.epubviewer.test;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import junit.framework.Assert;
@@ -11,6 +12,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
 import com.dteviot.epubviewer.Globals;
+import com.dteviot.epubviewer.HrefResolver;
 import com.dteviot.epubviewer.MainActivity;
 import com.dteviot.epubviewer.epub.Book;
 import com.dteviot.epubviewer.epub.ManifestItem;
@@ -66,8 +68,32 @@ public class TestEpubParse extends ActivityUnitTestCase<MainActivity> {
         Assert.assertEquals(".opf not found", "OPS/package.opf", book.getOpfFileName());
     }
 
+    private void setMOpfFileName(Book book)
+    {
+        try {
+            Field field = book.getClass().getDeclaredField("mOpfFileName");
+            if(!field.isAccessible()) {
+                field.setAccessible(true);
+            }        
+            field.set(book, "");
+        } catch (NoSuchFieldException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
     public void testParseOpfFile() {
         Book book = new Book();
+        
+        // set mOpfFileName to not null, or next call will fail.
+        setMOpfFileName(book);
+        
         exerciseParser("metadata.opf", book.constructOpfFileParser());
         ArrayList<ManifestItem> spine = book.getSpine();
         Assert.assertEquals("toc not found", "ncx", book.getTocID());
@@ -89,7 +115,8 @@ public class TestEpubParse extends ActivityUnitTestCase<MainActivity> {
     public void testParseTocFile() {
         Book book = new Book();
         TableOfContents points = book.getTableOfContents();
-        exerciseParser("toc.ncx", points.constructTocFileParser());
+        HrefResolver resolver = new HrefResolver("");
+        exerciseParser("toc.ncx", points.constructTocFileParser(resolver));
         Assert.assertEquals("toc wrong size", 2, points.size());
 
         Assert.assertEquals("ToC 1st item playOrder wrong", 1, points.get(0).getPlayOrder());
@@ -103,7 +130,8 @@ public class TestEpubParse extends ActivityUnitTestCase<MainActivity> {
     
     public void testParseNestedTocFile() {
         TableOfContents toc = new TableOfContents();
-        ContentHandler handler = toc.constructTocFileParser();
+        HrefResolver resolver = new HrefResolver("");
+        ContentHandler handler = toc.constructTocFileParser(resolver);
         exerciseParser("toc.xml", handler);
         Assert.assertEquals("toc wrong size", 5, toc.size());
 
