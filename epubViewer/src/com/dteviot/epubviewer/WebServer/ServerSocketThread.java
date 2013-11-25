@@ -12,7 +12,6 @@ public class ServerSocketThread extends Thread {
     private WebServer mWebServer;
     private ServerSocket mServerSocket;
     private volatile boolean mIsRunning = false;
-    private int mPort;
 
     /*
      * @param webServer to process the requests from the client
@@ -21,7 +20,11 @@ public class ServerSocketThread extends Thread {
     public ServerSocketThread(WebServer webServer, int port){
         super(THREAD_NAME);
         mWebServer = webServer;
-        mPort = port;
+        try {
+            mServerSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -29,7 +32,6 @@ public class ServerSocketThread extends Thread {
         super.run();
         
         try {
-            mServerSocket = new ServerSocket(mPort);
             mServerSocket.setReuseAddress(true);
             while(mIsRunning) {
                 // wait until a client makes a request.
