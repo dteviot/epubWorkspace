@@ -52,13 +52,13 @@ public class ListEpubActivity extends ListActivity {
      * populate mFileNames with all files in Downloads directory of SD card
      */
     private void listEpubFiles() {
+        mFileNames = new ArrayList<String>();
         if (!isMediaAvailable()) {
             Utility.finishWithError(this, R.string.sd_card_not_mounted);
         } else {
             File path = Environment
                     .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             mRootPath = path.toString();
-            mFileNames = new ArrayList<String>();
             String[] filesInDirectory = path.list();
             if (filesInDirectory != null) {
                 for (String fileName : filesInDirectory) {
