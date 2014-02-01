@@ -110,6 +110,8 @@ public class StyleSheetElementFilter extends XMLFilterImpl{
     }
     
     private boolean isStyleSheet(Attributes attrs) {
-        return STYLESHEET_REL.equals(XmlUtil.getAttributesValue(attrs, ATTRIBUTE_REL));
+    	String relAttribute = XmlUtil.getAttributesValue(attrs, ATTRIBUTE_REL);
+        return (relAttribute != null) && 
+            (STYLESHEET_REL.compareToIgnoreCase(relAttribute) == 0);
     }
 }
