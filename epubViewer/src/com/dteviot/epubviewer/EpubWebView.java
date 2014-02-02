@@ -6,6 +6,7 @@ import com.dteviot.epubviewer.epub.Book;
 
 import android.content.Context;
 import android.graphics.Picture;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.speech.tts.TextToSpeech;
 import android.util.AttributeSet;
@@ -66,6 +67,11 @@ public abstract class EpubWebView extends WebView {
      * Pick an initial default
      */
     private float mFlingMinDistance = 320;
+
+    /*
+     * The total available area for drawing on
+     */
+    private Rect mRawScreenDimensions;
     
     public EpubWebView(Context context) {
         this(context, null);
@@ -166,13 +172,23 @@ public abstract class EpubWebView extends WebView {
             }
         }
         
-        // Useful on simulator where swipe dodgy.  Less so on real devices.
         /*
+         * If double tap at top/bottom fifth of screen, scroll page up/down
+         * 
+         */
         @Override
         public boolean onDoubleTap (MotionEvent e) {
-            return changeChapter(mBook.nextResource(mCurrentResourceUri));
+            float y = e.getY();
+            if (y <= mRawScreenDimensions.height() / 5) {
+                pageUp(false);
+                return true;
+            } else if (4 * mRawScreenDimensions.height() / 5 <= y) {
+                pageDown(false);
+                return true;
+            } else {
+                return false;
+            }
         }
-        */
     };
 
     private boolean changeChapter(Uri resourceUri) {
@@ -245,6 +261,7 @@ public abstract class EpubWebView extends WebView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        mRawScreenDimensions = new Rect(0, 0, w, h);
         mFlingMinDistance = w / 2;
     }
 
