@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -25,6 +26,13 @@ public class EpubWebView30 extends EpubWebView {
         super(context, attrs);
     }
 
+    /*
+     *  Do any Web settings specific to the derived class 
+     */
+    protected void addWebSettings(WebSettings settings) {
+        settings.setDisplayZoomControls(false);
+    }
+    
     /*
      * @ return Android version appropriate WebViewClient 
      */

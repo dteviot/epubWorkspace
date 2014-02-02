@@ -78,6 +78,7 @@ public abstract class EpubWebView extends WebView {
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setPluginState(WebSettings.PluginState.ON_DEMAND);
         settings.setBuiltInZoomControls(true);
+        addWebSettings(settings);
         setWebViewClient(mWebViewClient = createWebViewClient());
         setWebChromeClient(new WebChromeClient());
     }
@@ -86,6 +87,11 @@ public abstract class EpubWebView extends WebView {
      * @ return Android version appropriate WebViewClient 
      */
     abstract protected WebViewClient createWebViewClient();
+    
+    /*
+     *  Do any Web settings specific to the derived class 
+     */
+    abstract protected void addWebSettings(WebSettings settings);
     
     /*
      * Book to show
