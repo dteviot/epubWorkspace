@@ -180,10 +180,14 @@ public abstract class EpubWebView extends WebView {
         public boolean onDoubleTap (MotionEvent e) {
             float y = e.getY();
             if (y <= mRawScreenDimensions.height() / 5) {
-                pageUp(false);
+                if (!pageUp(false)) {
+                	changeChapter(mBook.previousResource(mCurrentResourceUri));
+                }
                 return true;
             } else if (4 * mRawScreenDimensions.height() / 5 <= y) {
-                pageDown(false);
+                if (!pageDown(false)) {
+                	changeChapter(mBook.nextResource(mCurrentResourceUri));
+                };
                 return true;
             } else {
                 return false;
