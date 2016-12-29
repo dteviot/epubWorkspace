@@ -1,5 +1,6 @@
 package com.dteviot.epubviewer;
 
+import android.net.Uri;
 
 /*
  * Converts relative href to absolute
@@ -15,6 +16,7 @@ public class HrefResolver {
     }
     
     public String ToAbsolute(String relativeHref) {
-    	return Utility.concatPath(mParentPath, relativeHref);
+        String decoded = Uri.decode(relativeHref);
+        return Utility.concatPath(mParentPath, decoded);
     }
 }
