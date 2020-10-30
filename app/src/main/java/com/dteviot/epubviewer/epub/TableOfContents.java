@@ -7,7 +7,6 @@ import org.xml.sax.ContentHandler;
 
 import com.dteviot.epubviewer.HrefResolver;
 
-import android.content.Intent;
 import android.sax.Element;
 import android.sax.EndElementListener;
 import android.sax.EndTextElementListener;
@@ -41,10 +40,6 @@ public class TableOfContents {
     /*
      * Unpacks contents from a bundle
      */
-    public TableOfContents(Intent intent, String key) {
-        mNavPoints = intent.getParcelableArrayListExtra(key);
-    }
-    
     public void add(NavPoint navPoint) {
         mNavPoints.add(navPoint);
     }
@@ -68,13 +63,6 @@ public class TableOfContents {
         return mNavPoints.size();
     }
 
-    /*
-     * Packs this into an intent
-     */
-    public void pack(Intent intent, String key) {
-        intent.putExtra(key, mNavPoints);
-    }
-    
     /*
      * build parser to parse the "Table of Contents" file,
      * @return parser

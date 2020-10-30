@@ -16,6 +16,7 @@ import com.dteviot.epubviewer.ResourceResponse;
 import com.dteviot.epubviewer.Utility;
 import com.dteviot.epubviewer.XmlUtil;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.sax.Element;
 import android.sax.RootElement;
@@ -26,6 +27,7 @@ import android.util.Log;
  * Represents a book that's been packed into an epub file
  */
 public class Book implements IResourceSource {
+    public static final String EPUB_FILENAME = "EPUB_FILENAME";
     private final static String HTTP_SCHEME = "http";
     
     // the container XML
@@ -60,7 +62,12 @@ public class Book implements IResourceSource {
      * Id of the "table of contents" entry in manifest
      */
     private String mTocID;
-    
+
+    /*
+     * The Epub file
+     */
+    private String mFileName;
+
     // Allow access to state for unit tests.
     public String getOpfFileName() { return mOpfFileName; }
     public String getTocID() { return mTocID; }
@@ -91,12 +98,21 @@ public class Book implements IResourceSource {
         mManifest = new Manifest();
         mTableOfContents = new TableOfContents();
     }
-    
+
+    /*
+     * Constructor
+     * @param intent holding info needed to recreate
+     */
+    public Book(Intent intent) {
+        this(intent.getStringExtra(EPUB_FILENAME));
+    }
+
     /*
      * Constructor
      * @param fileName the filename of the Zip archive file
      */
     public Book(String fileName) {
+        mFileName = fileName;
         mSpine = new ArrayList<ManifestItem>();
         mManifest = new Manifest();
         mTableOfContents = new TableOfContents();
@@ -281,6 +297,13 @@ public class Book implements IResourceSource {
             }
         });
         return root.getContentHandler();
+    }
+
+    /*
+     * Packs enuogh info to rebuild this into an intent
+     */
+    public void pack(Intent intent) {
+        intent.putExtra(EPUB_FILENAME, mFileName);
     }
     
     /*

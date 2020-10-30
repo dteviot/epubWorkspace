@@ -2,6 +2,7 @@ package com.dteviot.epubviewer;
 
 
 import com.dteviot.epubviewer.epub.NavPoint;
+import com.dteviot.epubviewer.epub.Book;
 import com.dteviot.epubviewer.epub.TableOfContents;
 
 import android.app.ListActivity;
@@ -17,15 +18,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ListChaptersActivity extends ListActivity {
-    public static final String CHAPTERS_EXTRA = "CHAPTERS_EXTRA";
     public static final String CHAPTER_EXTRA = "CHAPTER_EXTRA";
 
+    private Book mBook;
     private TableOfContents mToc;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mToc = new TableOfContents(getIntent(), CHAPTERS_EXTRA);
+        mBook = new Book(getIntent());
+        mToc = mBook.getTableOfContents();
         getListView().setAdapter(new EpubChapterAdapter(this));
     }
 

@@ -107,12 +107,11 @@ public class MainActivity extends Activity implements IResourceSource {
         if (book == null) {
             Utility.showToast(this, R.string.no_book_selected);
         } else {
-            TableOfContents toc = book.getTableOfContents();
-            if (toc.size() == 0) {
+            if (book.getTableOfContents().size() == 0) {
                 Utility.showToast(this, R.string.table_of_contents_missing);
             } else {
                 Intent listChaptersIntent = new Intent(this, ListChaptersActivity.class);
-                toc.pack(listChaptersIntent, ListChaptersActivity.CHAPTERS_EXTRA);
+                book.pack(listChaptersIntent);
                 startActivityForResult(listChaptersIntent, LIST_CHAPTER_ACTIVITY_ID);
             }
         }
